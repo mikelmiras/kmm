@@ -7,11 +7,16 @@ services:
       POSTGRES_USER: web_admin
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: kmm
+    
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5433:5432"
 
   frontend:
     image: mikelmiras/kmm:latest
+    depends_on:
+      - db
     ports:
       - "3001:3000"
     env_file:
