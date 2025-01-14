@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pnpm run db:push
+./pnpm run db:push
 echo "Migrations run. Starting the app"\
 
-pnpm run start
+./pnpm run start
