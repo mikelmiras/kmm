@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: web_admin
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: kmm
+    ports:
+      - "5433:5432"
+
+  frontend:
+    image: mikelmiras/kmm:latest
+    ports:
+      - "3001:3000"
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app/_next/
+    restart: always
+
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_POLL_INTERVAL=15
+    command: --cleanup
+
+networks:
+  my-bridge-network:
+    driver: bridge
