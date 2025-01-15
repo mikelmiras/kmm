@@ -27,9 +27,9 @@ video-js {
 }
 
 /* Hide the progress bar and duration */
-.vjs-progress-control,
-.vjs-current-time,
-.vjs-duration {
+.stream .vjs-progress-control,
+.stream .vjs-current-time,
+.stream .vjs-duration {
   display: none !important;
 }
 
