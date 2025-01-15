@@ -9,16 +9,14 @@ fi
 # Input file
 INPUT_FILE="$1"
 OUTPUT_FOLDER="$2"
-# Output file base names
-BASE_NAME=$(basename "$INPUT_FILE" .mp4)
 
-mkdir -p "uploads/${OUTPUT_FOLDER}"
+mkdir -p "${OUTPUT_FOLDER}"
 # Run FFmpeg with the specified settings
 ffmpeg -i "$INPUT_FILE" \
-  -filter_complex "[0:v]split=3[v1][v2][v3];[v1]scale=w=1920:h=1080[v1out];[v2]scale=w=1280:h=720[v2out];[v3]scale=w=854:h=480[v3out]" \
-  -map "[v1out]" -map 0:a -c:v h264 -c:a aac -b:v 5000k -b:a 192k -f hls -hls_time 6 -hls_playlist_type vod -hls_segment_filename "uploads/${OUTPUT_FOLDER}/1080p_%03d.ts" "uploads/${OUTPUT_FOLDER}/1080p.m3u8" \
-  -map "[v2out]" -map 0:a -c:v h264 -c:a aac -b:v 3000k -b:a 128k -f hls -hls_time 6 -hls_playlist_type vod -hls_segment_filename "uploads/${OUTPUT_FOLDER}/720p_%03d.ts" "uploads/${OUTPUT_FOLDER}/720p.m3u8" \
-  -map "[v3out]" -map 0:a -c:v h264 -c:a aac -b:v 1000k -b:a 64k -f hls -hls_time 6 -hls_playlist_type vod -hls_segment_filename "uploads/${OUTPUT_FOLDER}/480p_%03d.ts" "uploads/${OUTPUT_FOLDER}/480p.m3u8"
+  -filter_complex "[0:v]split=3[v1][v2][v3];[v1]scale=w=trunc(oh*a/2)*2:h=1080[v1out];[v2]scale=w=trunc(oh*a/2)*2:h=720[v2out];[v3]scale=w=trunc(oh*a/2)*2:h=480[v3out]" \
+  -map "[v1out]" -map 0:a? -c:v h264 -c:a aac -b:v 5000k -b:a 192k -f hls -hls_time 6 -hls_playlist_type vod -hls_segment_filename "${OUTPUT_FOLDER}/1080p_%03d.ts" "${OUTPUT_FOLDER}/1080p.m3u8" \
+  -map "[v2out]" -map 0:a? -c:v h264 -c:a aac -b:v 3000k -b:a 128k -f hls -hls_time 6 -hls_playlist_type vod -hls_segment_filename "${OUTPUT_FOLDER}/720p_%03d.ts" "${OUTPUT_FOLDER}/720p.m3u8" \
+  -map "[v3out]" -map 0:a? -c:v h264 -c:a aac -b:v 1000k -b:a 64k -f hls -hls_time 6 -hls_playlist_type vod -hls_segment_filename "${OUTPUT_FOLDER}/480p_%03d.ts" "${OUTPUT_FOLDER}/480p.m3u8"
 
 # Check if FFmpeg command succeeded
 if [ $? -eq 0 ]; then

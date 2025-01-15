@@ -3,6 +3,7 @@
 import { useUser } from "@/context/userContext";
 import { chunkFile } from "@/util/file";
 import { Progress } from "@nextui-org/react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoCloudCircleSharp } from "react-icons/io5";
@@ -11,6 +12,7 @@ export default function UploadVideoPage() {
   const user = useUser();
   const [file, setFile] = useState<File | null>(null);
   const [percentage, setPercentage] = useState(0);
+  const [videoId, setVideoId] = useState<string|undefined>(undefined)
   useEffect(() => {
     if (user.loaded && !user.user) redirect("/signin");
   }, [user]);
@@ -78,9 +80,11 @@ export default function UploadVideoPage() {
             const f = files[0]
             setFile(files[0]);
             const id = crypto.randomUUID().toString()
+            setVideoId(id)
             const extension = f.name.split(".")[f.name.split(".").length - 1]
             const filename = id + "." + extension
             setPercentage(0)
+            
             uploadChunks(f, filename, extension)
           }}
           className="hidden"
@@ -97,6 +101,7 @@ export default function UploadVideoPage() {
           Click here to select a video
         </div>
         <Progress size="sm" value={percentage} />
+        {videoId ? <>Your video will be available at <Link className="color-primary underline" href={`/play/${videoId}`}>https://stream.mikelm.dev/play/{videoId}</Link> after the processing has ended.</> : <></>}
       </div>
     </>
   );

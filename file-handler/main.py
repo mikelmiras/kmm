@@ -21,12 +21,15 @@ def process_video(video_name):
     print(f"Processing video: {video_name}")
     process_path = os.path.join(ABSOLUTE_PATH, "process_video")
     video_without_extension = video_name.split(".")[0]
+    OUTPUT_FOLDER = f"{ABSOLUTE_PATH}/uploads/{video_without_extension}"
+    print("Running command: ", [process_path, f"{ABSOLUTE_PATH}/uploads/{video_name}", OUTPUT_FOLDER])
     process = subprocess.run(
-    [process_path, f"{ABSOLUTE_PATH}/uploads/{video_name}", video_without_extension],
+    [process_path, f"{ABSOLUTE_PATH}/uploads/{video_name}", OUTPUT_FOLDER],
     capture_output=True
 )  
     if (process.returncode != 0):
-        logging.error("ffmpeg action didn't success")
+        print("ffmpeg action didn't success")
+        return
     print(f"Processing {video_name} completed. Uploading to S3...")
     uploadFolderToS3(f"{ABSOLUTE_PATH}/uploads/{video_without_extension}", video_without_extension)
     print(f"Video {video_name} uploaded to S3.")
@@ -102,12 +105,11 @@ def rebuildChunksEndpoint(chunk_name, file_extension):
                 with open(file_path, "rb") as chunk_bytes:
                     f.write(chunk_bytes.read())
                 os.remove(file_path)
-        print("Chunks analyzed")
+        print("Chunks analyzed. Full video generated at: ", f"{ABSOLUTE_PATH}/uploads/{str(new_name)}")
         os.rmdir(f'{ABSOLUTE_PATH}/uploads/{str(chunk_name)}')
         print("Removed: ", f'{ABSOLUTE_PATH}/uploads/{str(chunk_name)}')
 
         full_file_path = f"{ABSOLUTE_PATH}/uploads/{new_name}"
-        s3_client.upload_file(full_file_path, S3_BUCKET, new_name, ExtraArgs={'ACL': 'public-read'})
         launch_in_bg(process_video, new_name)
         return make_response({"status":True})
     except Exception as e:
