@@ -19,3 +19,34 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+video-js {
+  border-radius: 0.375rem !important;
+  box-sizing: border-box !important;
+}
+
+/* Hide the progress bar and duration */
+.vjs-progress-control,
+.vjs-current-time,
+.vjs-duration {
+  display: none !important;
+}
+
+.vjs-control-bar {
+  justify-content: center;
+}
+
+video {
+  border-radius: .375rem !important;
+  box-sizing: border-box !important;
+}
+
+.video-js {
+  border-radius: .375rem !important;
+  box-sizing: border-box !important;
+}
+
+.vjs-error-display {
+  display: none !important;
+}

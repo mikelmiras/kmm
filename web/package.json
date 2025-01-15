@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:push": "drizzle-kit push",
-    "build_docker":"/app/node_modules/.bin/next build"
+    "build_docker": "/app/node_modules/.bin/next build"
   },
   "dependencies": {
     "@nextui-org/react": "^2.6.11",
@@ -18,7 +18,9 @@
     "next": "15.1.4",
     "pg": "^8.13.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "video.js": "^8.21.0",
+    "videojs-hls-quality-selector": "^2.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
