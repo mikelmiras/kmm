@@ -29,3 +29,7 @@ jobs:
       - name: Build and Push App
         run: |
           docker buildx build --platform linux/amd64 -t mikelmiras/kmm:latest ./web --push
+
+      - name: Build and Push File handler
+        run: |
+          docker buildx build --platform linux/amd64 -t mikelmiras/kmm-file-handler:latest ./file-handler --push
