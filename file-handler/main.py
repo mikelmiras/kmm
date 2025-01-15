@@ -93,15 +93,18 @@ def rebuildChunksEndpoint(chunk_name, file_extension):
     new_name = "{}.{}".format(str(uuid.uuid4()), str(file_extension))
 
     try:
+        print("Trying to create file: ", f"{ABSOLUTE_PATH}/uploads/{str(new_name)}")
         with open(f"{ABSOLUTE_PATH}/uploads/{str(new_name)}", "wb+") as f:
             for chunk in file_list:
-                file_path = "uploads/{}/{}".format(str(chunk_name), str(chunk))
+                file_path = f"{ABSOLUTE_PATH}/uploads/{str(chunk_name)}/{str(chunk)}"
                 with open(file_path, "rb") as chunk_bytes:
                     f.write(chunk_bytes.read())
                 os.remove(file_path)
+        print("Chunks analyzed")
         os.rmdir(f'{ABSOLUTE_PATH}/uploads/{str(chunk_name)}')
-        
-        full_file_path = "uploads/{}".format(new_name)
+        print("Removed: ", f'{ABSOLUTE_PATH}/uploads/{str(chunk_name)}')
+
+        full_file_path = f"{ABSOLUTE_PATH}/uploads/{new_name}"
         s3_client.upload_file(full_file_path, S3_BUCKET, new_name, ExtraArgs={'ACL': 'public-read'})
         launch_in_bg(process_video, new_name)
         return make_response({"status":True})
