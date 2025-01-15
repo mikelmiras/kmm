@@ -22,6 +22,7 @@ export async function POST (request: Request){
     const user = (await db.select({password:usersTable.password, id:usersTable.id}).from(usersTable).where(eq(usersTable.email, email)).limit(1))[0]
     if (!user) return Response.json({error:"Account doesn't exist"}, {status:401});
     const isvalidPassword = bcrypt.compareSync(password, user.password as string)
+    if (!isvalidPassword) return Response.json({error:"Invalid password"}, {status:403})
     const expires_at : Date = new Date()
     expires_at.setMonth(new Date().getMonth() + 1)
     try {
