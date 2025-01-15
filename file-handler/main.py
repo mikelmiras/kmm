@@ -1,18 +1,33 @@
 import logging
 import re
+import threading
+import time
 import uuid
 from flask import Flask, request, make_response
 import os
 from dotenv import *
 from botocore.config import Config
 import boto3 
+from util.files import *
+import subprocess
 load_dotenv()
 
 S3_URL = os.environ.get("S3_URL")
 S3_AUTH = os.environ.get("S3_AUTH_TOKEN")
 S3_SECRET = os.environ.get("S3_SECRET")
 S3_BUCKET = os.environ.get("S3_BUCKET")
-
+ABSOLUTE_PATH = os.getcwd()
+def process_video(video_name):
+    print(f"Processing video: {video_name}")
+    process_path = os.path.join(ABSOLUTE_PATH, "process_video")
+    video_without_extension = video_name.split(".")[0]
+    process = subprocess.run(
+    [process_path, f"{ABSOLUTE_PATH}/uploads/{video_name}", video_without_extension],
+    capture_output=True
+)  
+    print(f"Processing {video_name} completed. Uploading to S3...")
+    uploadFolderToS3(f"{ABSOLUTE_PATH}/uploads/{video_without_extension}", video_without_extension)
+    print(f"Video {video_name} uploaded to S3.")
 
 s3_client = boto3.client('s3',
                          endpoint_url=S3_URL,
@@ -56,6 +71,10 @@ def receiveChunkEndpoint():
         return make_response({"error":"Error saving file"}, 500)
 
 
+def launch_in_bg(target_func, *args, **kwargs):
+    thread = threading.Thread(target=target_func, args=args, kwargs=kwargs)
+    thread.daemon = True  # Ensure the thread exits when the main program ends
+    thread.start()
 
 @app.get("/api/s3/rebuild/<chunk_name>/<file_extension>", endpoint="Rebuild chunk into a file")
 def rebuildChunksEndpoint(chunk_name, file_extension):
@@ -84,6 +103,7 @@ def rebuildChunksEndpoint(chunk_name, file_extension):
         
         full_file_path = "uploads/{}".format(new_name)
         s3_client.upload_file(full_file_path, S3_BUCKET, new_name, ExtraArgs={'ACL': 'public-read'})
+        launch_in_bg(process_video, new_name)
         return make_response({"status":True})
     except Exception as e:
         logging.error("Error rebuilding file: " + str(e))

@@ -52,6 +52,10 @@ export default function UploadVideoPage() {
     }else{
       setPercentage(100)
       alert("File uploaded successfully")
+      setTimeout(()=>{
+        setPercentage(0)
+        setFile(null)
+      }, 200)
     }
   }
 

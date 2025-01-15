@@ -18,7 +18,7 @@ s3_client = boto3.client('s3',
 
 
 def uploadFolderToS3(folder:str, video_id:str):
-    folder_path = "uploads/{}".format(str(folder))
+    folder_path = "{}".format(str(folder))
 
     
     with open(folder_path + "/master.m3u8", "w+") as f:
