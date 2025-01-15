@@ -1,13 +1,19 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@nextui-org/card"
+import { useUser } from "@/context/userContext";
+import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card"
 import { Form } from "@nextui-org/form";
 import { Button, Divider, Input } from "@nextui-org/react";
+import Link from "next/link";
 import { redirect } from 'next/navigation'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 export const SigninForm = () => {
     const [loginDetails, setLoginDetails] = useState({email:"", password:""})
     const [loading, setLoading] = useState(false)
+    const user = useUser()
+    useEffect(()=> {
+     if (user.user) window.location.href = "/"
+    }, [user])
     return (<>
     <Card className="p-4">
       <CardHeader>
@@ -133,6 +139,9 @@ export const SignupForm = () => {
     </div>
   </Form>
       </CardBody>
+      <CardFooter>
+        Already have an account? <Link href={"/signin"}>Sign in.</Link>
+      </CardFooter>
   </Card>
   </>)
 
