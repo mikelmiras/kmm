@@ -25,6 +25,8 @@ def process_video(video_name):
     [process_path, f"{ABSOLUTE_PATH}/uploads/{video_name}", video_without_extension],
     capture_output=True
 )  
+    if (process.returncode != 0):
+        logging.error("ffmpeg action didn't success")
     print(f"Processing {video_name} completed. Uploading to S3...")
     uploadFolderToS3(f"{ABSOLUTE_PATH}/uploads/{video_without_extension}", video_without_extension)
     print(f"Video {video_name} uploaded to S3.")
