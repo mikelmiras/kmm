@@ -1,7 +1,7 @@
-export function chunkFile(file: File): Promise<Uint8Array[]> {
+export function chunkFile(file: File): Promise<any[]> {
     const chunkSize = 4 * 1024 * 1024; // 4MB in bytes
     const numberOfChunks = Math.ceil(file.size / chunkSize);
-    const chunks: Uint8Array[] = [];
+    const chunks: any[] = [];
   
     return new Promise((resolve, reject) => {
       let offset = 0;
@@ -17,7 +17,7 @@ export function chunkFile(file: File): Promise<Uint8Array[]> {
   
         reader.onload = () => {
           if (reader.result instanceof ArrayBuffer) {
-            chunks.push(new Uint8Array(reader.result));
+            chunks.push(chunkBlob);
             offset += chunkSize;
             readNextChunk(); // Read the next chunk
           } else {

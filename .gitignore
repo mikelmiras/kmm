@@ -3,6 +3,7 @@ venv/
 .DS_Store
 __pycache__/
 # dependencies
+uploads/
 node_modules
 /.pnp
 .pnp.*
