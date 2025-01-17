@@ -84,7 +84,7 @@ export const SignupForm = () => {
   return (<>
     <Card className="p-4">
       <CardHeader>
-        <h1 className="text-2xl">Log in</h1>
+        <h1 className="text-2xl">Sign up</h1>
       </CardHeader>
       <Divider />
       <CardBody className="p-4">

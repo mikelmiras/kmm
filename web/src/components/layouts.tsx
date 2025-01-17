@@ -10,13 +10,9 @@ export default function FormLayout({ children }: any) {
   }, []);
   if (!mounted)
     return (
-      <NextUIProvider>
-      <NextThemesProvider>
         <section className="flex flex-col justify-center h-[100vh] items-center align-center width-100">
           {children}
         </section>
-      </NextThemesProvider>
-    </NextUIProvider>
     );
 
   return (
