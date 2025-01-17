@@ -95,7 +95,7 @@ def rebuildChunksEndpoint(chunk_name, file_extension):
         logging.error(str(e))
         return make_response({"error":"error mounting file"})
 
-    new_name = "{}.{}".format(str(uuid.uuid4()), str(file_extension))
+    new_name = chunk_name
 
     try:
         print("Trying to create file: ", f"{ABSOLUTE_PATH}/uploads/{str(new_name)}")
