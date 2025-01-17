@@ -18,12 +18,12 @@ s3_client = boto3.client('s3',
 
 
 def uploadFolderToS3(folder:str, video_id:str):
-    folder_path = "{}".format(str(folder))
+    folder_path = "{}_dir".format(str(folder))
 
     try:
         os.makedirs(folder_path, exist_ok=True)
     except Exception as e:
-        print("Error creating output folder: ", + str(e) )
+        print("Error creating output folder: ", str(e) )
         return
     with open(folder_path + "/master.m3u8", "w+") as f:
         f.write("""#EXTM3U

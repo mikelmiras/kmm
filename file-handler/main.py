@@ -21,7 +21,7 @@ def process_video(video_name):
     print(f"Processing video: {video_name}")
     process_path = os.path.join(ABSOLUTE_PATH, "process_video")
     video_without_extension = video_name.split(".")[0]
-    OUTPUT_FOLDER = f"{ABSOLUTE_PATH}/uploads/{video_without_extension}"
+    OUTPUT_FOLDER = f"{ABSOLUTE_PATH}/uploads/{video_without_extension}_dir"
     print("Running command: ", [process_path, f"{ABSOLUTE_PATH}/uploads/{video_name}", OUTPUT_FOLDER])
     process = subprocess.run(
     [process_path, f"{ABSOLUTE_PATH}/uploads/{video_name}", OUTPUT_FOLDER],
@@ -95,7 +95,7 @@ def rebuildChunksEndpoint(chunk_name, file_extension):
         logging.error(str(e))
         return make_response({"error":"error mounting file"})
 
-    new_name = chunk_name
+    new_name = chunk_name.split(".")[0]
 
     try:
         print("Trying to create file: ", f"{ABSOLUTE_PATH}/uploads/{str(new_name)}")
