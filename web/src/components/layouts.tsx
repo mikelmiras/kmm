@@ -10,15 +10,19 @@ export default function FormLayout({ children }: any) {
   }, []);
   if (!mounted)
     return (
-      <section className="flex flex-col justify-center h-[100vh] w-[100vw] items-center align-center width-100">
-        {children}
-      </section>
+      <NextUIProvider>
+      <NextThemesProvider>
+        <section className="flex flex-col justify-center h-[100vh] items-center align-center width-100">
+          {children}
+        </section>
+      </NextThemesProvider>
+    </NextUIProvider>
     );
 
   return (
     <NextUIProvider>
       <NextThemesProvider>
-        <section className="flex flex-col justify-center h-[100vh] w-[100vw] items-center align-center width-100">
+        <section id="main-auth-section" className="flex flex-col justify-center h-[100vh] w-[100vw] items-center align-center width-100">
           {children}
         </section>
       </NextThemesProvider>

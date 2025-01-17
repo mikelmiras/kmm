@@ -32,7 +32,9 @@ export default async function AuthLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}   
         >
-          <FormLayout children={children} />
+          <FormLayout>
+            {children}
+            </FormLayout>
       </body>
     </html>
   );
