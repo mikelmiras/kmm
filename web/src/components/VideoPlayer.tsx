@@ -68,4 +68,20 @@ const VideoPlayer = ({ streamingId }: { streamingId: string }) => {
   );
 };
 
+
+
+export const NativeVideoPlayer = ({ streamingId }: { streamingId: string }) => {
+
+
+  return (
+    <div className="video-container">
+      <video controls width="640" height="360">
+  <source src={`https://cdn.mikelm.dev/${streamingId}/master.m3u8`} type="application/x-mpegURL" />
+  Your browser does not support HLS streaming.
+</video>
+
+    </div>
+  );
+};
+
 export default VideoPlayer;
