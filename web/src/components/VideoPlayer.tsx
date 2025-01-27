@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
-import 'videojs-hls-quality-selector'
+import "videojs-hls-quality-selector";
 
 const VideoPlayer = ({ streamingId }: { streamingId: string }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -21,7 +21,6 @@ const VideoPlayer = ({ streamingId }: { streamingId: string }) => {
       ],
     }) as any;
 
-
     // Handle fullscreen change to unmute in fullscreen
     player.on("fullscreenchange", () => {
       if (player.isFullscreen()) {
@@ -29,19 +28,15 @@ const VideoPlayer = ({ streamingId }: { streamingId: string }) => {
       }
     });
 
-
     player.hlsQualitySelector({
       displayCurrentQuality: true, // Display the current quality in the control bar
     });
-
 
     // Handle player errors
     player.on("error", () => {
       // Set a custom poster when there's an error
       player.poster("/globe.svg");
     });
-
-    
 
     playerRef.current = player;
 
@@ -62,24 +57,21 @@ const VideoPlayer = ({ streamingId }: { streamingId: string }) => {
         controls
         preload="auto"
         data-setup="{}"
-      >
-      </video>
+      ></video>
     </div>
   );
 };
 
-
-
 export const NativeVideoPlayer = ({ streamingId }: { streamingId: string }) => {
-
-
   return (
     <div className="video-container">
       <video controls width="640" height="360">
-  <source src={`https://cdn.mikelm.dev/${streamingId}/master.m3u8`} type="application/x-mpegURL" />
-  Your browser does not support HLS streaming.
-</video>
-
+        <source
+          src={`https://cdn.mikelm.dev/${streamingId}/master.m3u8`}
+          type="application/x-mpegURL"
+        />
+        Your browser does not support HLS streaming.
+      </video>
     </div>
   );
 };

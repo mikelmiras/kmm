@@ -11,4 +11,4 @@ const StreamPage = () => {
   );
 };
 
-export default StreamPage
+export default StreamPage;

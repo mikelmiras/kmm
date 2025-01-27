@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { useRef, useState } from 'react';
-import { createFFmpeg, FFmpeg } from '@ffmpeg/ffmpeg'; // Import the types for FFmpeg
+import React, { useRef, useState } from "react";
+import { createFFmpeg, FFmpeg } from "@ffmpeg/ffmpeg"; // Import the types for FFmpeg
 
 interface WebcamStreamerProps {
   rtmpUrl: string; // RTMP server URL
@@ -26,32 +26,34 @@ const WebcamStreamer: React.FC<WebcamStreamerProps> = ({ rtmpUrl }) => {
       setMediaStream(stream);
 
       // Dynamically import FFmpeg and use the correct types
-      const { createFFmpeg } = (await import('@ffmpeg/ffmpeg')) as typeof import('@ffmpeg/ffmpeg');
+      const { createFFmpeg } = (await import(
+        "@ffmpeg/ffmpeg"
+      )) as typeof import("@ffmpeg/ffmpeg");
       const ffmpeg: FFmpeg = createFFmpeg({ log: true });
       await ffmpeg.load();
 
       // Set up MediaRecorder to capture the stream
       const options: MediaRecorderOptions = {
-        mimeType: 'video/webm; codecs=vp8',
+        mimeType: "video/webm; codecs=vp8",
       };
       const mediaRecorder = new MediaRecorder(stream, options);
 
       mediaRecorder.ondataavailable = async (event) => {
         if (event.data && event.data.size > 0) {
           // Transcode video data to RTMP
-          const videoBlob = new Blob([event.data], { type: 'video/webm' });
+          const videoBlob = new Blob([event.data], { type: "video/webm" });
           const file = new Uint8Array(await videoBlob.arrayBuffer());
-          ffmpeg.FS('writeFile', 'input.webm', file);
+          ffmpeg.FS("writeFile", "input.webm", file);
 
           await ffmpeg.run(
-            '-i',
-            'input.webm',
-            '-c:v',
-            'libx264',
-            '-preset',
-            'ultrafast',
-            '-f',
-            'flv',
+            "-i",
+            "input.webm",
+            "-c:v",
+            "libx264",
+            "-preset",
+            "ultrafast",
+            "-f",
+            "flv",
             rtmpUrl
           );
         }
@@ -61,7 +63,7 @@ const WebcamStreamer: React.FC<WebcamStreamerProps> = ({ rtmpUrl }) => {
       mediaRecorderRef.current = mediaRecorder;
       setIsStreaming(true);
     } catch (err) {
-      console.error('Error accessing webcam or starting stream:', err);
+      console.error("Error accessing webcam or starting stream:", err);
     }
   };
 
@@ -82,9 +84,9 @@ const WebcamStreamer: React.FC<WebcamStreamerProps> = ({ rtmpUrl }) => {
         autoPlay
         muted
         playsInline
-        style={{ width: '100%', height: 'auto', border: '1px solid black' }}
+        style={{ width: "100%", height: "auto", border: "1px solid black" }}
       ></video>
-      <div style={{ marginTop: '10px' }}>
+      <div style={{ marginTop: "10px" }}>
         {!isStreaming ? (
           <button onClick={startStreaming}>Start Streaming</button>
         ) : (
